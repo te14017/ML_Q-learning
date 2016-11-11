@@ -46,8 +46,6 @@ class Robot(object):
             return feasible_actions[0]
         else:
             random.seed(2016)
-            if len(feasible_actions) <= 0:
-                a = 1
             choice = random.randint(0, len(feasible_actions)-1)
             return feasible_actions[choice]
 
