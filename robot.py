@@ -1,3 +1,4 @@
+# Copyright Team Terminator
 import random
 
 from helpers import *
