@@ -1,3 +1,4 @@
+# copyright Team Terminator
 from robot import Robot
 from environment import Environment
 from helpers import *
