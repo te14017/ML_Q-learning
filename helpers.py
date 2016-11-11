@@ -1,3 +1,4 @@
+# copyright Team Terminator
 class Position(object):
     def __init__(self, row, column):
         self.row = row
