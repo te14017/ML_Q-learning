@@ -6,16 +6,18 @@ from helpers import *
 def main():
     environment = Environment()
     robot = Robot()
+    i = 1
+    n = 10
+    while i <= n:
+        objective_found = False
+        while not objective_found:
+            action = robot.doAction()
+            new_position, action, profit_change, objective_found = environment.performRobotAction(action=action)
+            robot.update(next_position=new_position, action=action, profit_change=profit_change)
+        print robot
+        robot.reset()
+        i += 1
 
-    action = robot.doAction()
-
-    new_position, profit_change = environment.performRobotAction(action=action)
-    robot.state['position'] = new_position
-    robot.profit += profit_change
-    print action
-    print new_position
-    print profit_change
-    print robot
 
 if __name__ == '__main__':
     main()

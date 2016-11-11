@@ -1,4 +1,5 @@
 from helpers import *
+import random
 
 
 class Environment(object):
@@ -11,7 +12,7 @@ class Environment(object):
             Reward(value=-100, row=2, column=2, name='-100')
         ]
         self.square_size = 5
-        self.penalty = -2
+        self.penalty = -5
         self.movement_cost = -1
         self.forbidden_movements = [
             # forbidden movements need only to be declared once because the reverse movement will be checked
@@ -51,10 +52,10 @@ class Environment(object):
         return movement.desired_position.row <= 0 or movement.desired_position.row > self.square_size or \
                         movement.desired_position.column <= 0 or movement.desired_position.column > self.square_size
 
-    def _foundObjective(self, position):
+    def _foundObjective(self, movement):
         rewards = self.rewards
         for reward in rewards:
-            if position == reward.position:
+            if movement.desired_position == reward.position:
                 return True, reward.value
         else:
             return False, 0
@@ -62,13 +63,26 @@ class Environment(object):
     def performRobotAction(self, action):
         """
         :param action: Movement
-        :return position: Position, profit_change: int
+        :return position: Position, action: Action, profit_change: int, objective_found: boolean
         """
-        if not self._isLegalMovement(action):
-            return action.current_position, self.penalty
+        objective_found = False
+        if not self._isLegalMovement(action[1]):
+            return action[0], action, self.penalty + self.movement_cost, objective_found
 
-        objective_found, objective_value = self._foundObjective(action.desired_position)
+        objective_found, objective_value = self._foundObjective(action[1])
         if objective_found:
-            return action.desired_position, objective_found
+            return action[1].desired_position, action, objective_value+self.movement_cost, objective_found
 
-        return action.desired_position, self.movement_cost
+        # TODO choose direction randomly
+        random.seed(2016)
+        action_indicator = random.uniform(0, 1)  # random number 0 <= x <= 1
+        if action_indicator <= 0.8:
+            # do nothing
+            pass
+        elif action <= 0.9:
+            # change action to 90 left
+            pass
+        else:
+            # change action to 90 right
+            pass
+        return action[1].desired_position, action, self.movement_cost, objective_found

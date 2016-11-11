@@ -9,6 +9,12 @@ class Position(object):
     def __repr__(self):
         return "%s (%d,%d)" % (self.__class__.__name__, self.row, self.column)
 
+    def __hash__(self):
+        return hash((self.row, self.column))
+
+    def __ne__(self, other):
+        return not(self == other)
+
     def moveUp(self):
         return Position(row=self.row-1, column=self.column)
 
@@ -39,6 +45,12 @@ class Movement(object):
 
     def __repr__(self):
         return "%s from %s to %s" % (self.__class__.__name__, self.current_position, self.desired_position)
+
+    def __hash__(self):
+        return hash((self.current_position, self.desired_position))
+
+    def __ne__(self, other):
+        return not(self == other)
 
     def reverse(self):
         return Movement(current_position=self.desired_position, desired_position=self.current_position)
