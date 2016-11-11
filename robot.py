@@ -12,6 +12,7 @@ class Robot(object):
         self.profit = 0
         self.q = {}
         self.alpha = 0.9
+        self.epsilon = 0.5
         self.gamma = 0.9
 
     def __repr__(self):
@@ -62,7 +63,7 @@ class Robot(object):
                 value_list.append(value)
         next_q = max(value_list) if value_list else profit_change
 
-        new_q = q_state_action + self.alpha * (profit_change + self.gamma * next_q - q_state_action)
+        new_q = (1-self.alpha) * next_q + self.alpha * profit_change
 
         self.q[(self.state, action)] = new_q
 
