@@ -31,10 +31,10 @@ class Environment(object):
             Movement(current_position=Position(3, 3), desired_position=Position(3, 4)),
             Movement(current_position=Position(3, 4), desired_position=Position(3, 5)),
             # boundaries fourth row from left to right
-            Movement(current_position=Position(4, 1), desired_position=Position(3, 2)),
-            Movement(current_position=Position(4, 2), desired_position=Position(3, 3)),
-            Movement(current_position=Position(4, 3), desired_position=Position(3, 4)),
-            Movement(current_position=Position(4, 4), desired_position=Position(3, 5)),
+            Movement(current_position=Position(4, 1), desired_position=Position(4, 2)),
+            Movement(current_position=Position(4, 2), desired_position=Position(4, 3)),
+            Movement(current_position=Position(4, 3), desired_position=Position(4, 4)),
+            Movement(current_position=Position(4, 4), desired_position=Position(4, 5)),
         ]
 
     def _isLegalMovement(self, movement):
