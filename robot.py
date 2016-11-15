@@ -57,14 +57,14 @@ class Robot(object):
         self.profit += profit_change
 
     def _updateQ(self, next_position, action, profit_change):
-        q_state_action = self.q.get((self.state, action), 0)
+        current_q = self.q.get((self.state, action), 0)
         value_list = []
         for state_action_pair, value in self.q.iteritems():
             if next_position == state_action_pair[0]:
                 value_list.append(value)
-        next_q = max(value_list) if value_list else profit_change
+        next_q = max(value_list) if value_list else 0
 
-        new_q = (1-self.alpha) * next_q + self.alpha * profit_change
+        new_q = current_q + self.alpha * (profit_change + self.gamma * next_q - current_q)
 
         self.q[(self.state, action)] = new_q
 
