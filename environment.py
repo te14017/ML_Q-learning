@@ -24,7 +24,7 @@ class Environment(object):
             Movement(current_position=Position(2, 2), desired_position=Position(2, 3)),
             Movement(current_position=Position(2, 3), desired_position=Position(3, 3)),
             Movement(current_position=Position(2, 3), desired_position=Position(2, 4)),
-            Movement(current_position=Position(2, 4), desired_position=Position(3, 5)),
+            Movement(current_position=Position(2, 4), desired_position=Position(2, 5)),
             # boundaries third row from left to right
             Movement(current_position=Position(3, 1), desired_position=Position(3, 2)),
             Movement(current_position=Position(3, 2), desired_position=Position(3, 3)),
