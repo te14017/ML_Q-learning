@@ -12,9 +12,9 @@ class Robot(object):
         self.state = Position(1, 1)
         self.profit = 0
         self.q = {}
-        self.alpha = 0.9
+        self.alpha = 0.9  # learning rate
+        self.gamma = 0.9  # discount factor
         self.epsilon = 0.5
-        self.gamma = 0.9
 
     def __repr__(self):
         return "%s is @ %s. Profit is: %d" % (self.__class__.__name__, self.state, self.profit)
