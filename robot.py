@@ -14,7 +14,7 @@ class Robot(object):
         self.q = {}
         self.alpha = 0.9  # learning rate
         self.gamma = 0.9  # discount factor
-        self.epsilon = 0.5
+        self.epsilon = 0.9  # exploration rate
 
     def __repr__(self):
         return "%s is @ %s. Profit is: %d" % (self.__class__.__name__, self.state, self.profit)
@@ -40,15 +40,21 @@ class Robot(object):
             if reward > biggest_reward:
                 biggest_reward = reward
 
+        go_on_exploration = random.uniform(0, 1) < self.epsilon
+        self.epsilon = self.epsilon - 0.01 if self.epsilon > 0 else 0
         feasible_actions = []
-        for state_action_pair, reward in available_qs.iteritems():
-            if reward == biggest_reward:
-                feasible_actions.append(state_action_pair)
+        if not go_on_exploration:
+            for state_action_pair, reward in available_qs.iteritems():
+                if reward == biggest_reward:
+                    feasible_actions.append(state_action_pair)
+        else:
+            for state_action_pair, reward in available_qs.iteritems():
+                    feasible_actions.append(state_action_pair)
+
         if len(feasible_actions) == 1:
             return feasible_actions[0]
         else:
-            random.seed(2016)
-            choice = random.randint(0, len(feasible_actions)-1)
+            choice = random.randint(0, len(feasible_actions) - 1)
             return feasible_actions[choice]
 
     def update(self, next_position, action, profit_change):
