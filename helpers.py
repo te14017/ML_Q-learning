@@ -14,19 +14,19 @@ class Position(object):
         return hash((self.row, self.column))
 
     def __ne__(self, other):
-        return not(self == other)
+        return not (self == other)
 
     def moveUp(self):
-        return Position(row=self.row-1, column=self.column)
+        return Position(row=self.row - 1, column=self.column)
 
     def moveDown(self):
-        return Position(row=self.row+1, column=self.column)
+        return Position(row=self.row + 1, column=self.column)
 
     def moveRight(self):
-        return Position(row=self.row, column=self.column+1)
+        return Position(row=self.row, column=self.column + 1)
 
     def moveLeft(self):
-        return Position(row=self.row, column=self.column-1)
+        return Position(row=self.row, column=self.column - 1)
 
 
 class Reward(object):
@@ -51,7 +51,27 @@ class Movement(object):
         return hash((self.current_position, self.desired_position))
 
     def __ne__(self, other):
-        return not(self == other)
+        return not (self == other)
 
     def reverse(self):
         return Movement(current_position=self.desired_position, desired_position=self.current_position)
+
+    def turnLeft(self):
+        if self.desired_position == self.current_position.moveUp():
+            return Movement(self.current_position, self.current_position.moveLeft())
+        elif self.desired_position == self.current_position.moveLeft():
+            return Movement(self.current_position, self.current_position.moveDown())
+        elif self.desired_position == self.current_position.moveDown():
+            return Movement(self.current_position, self.current_position.moveRight())
+        else:
+            return Movement(self.current_position, self.current_position.moveUp())
+
+    def turnRight(self):
+        if self.desired_position == self.current_position.moveUp():
+            return Movement(self.current_position, self.current_position.moveRight())
+        elif self.desired_position == self.current_position.moveLeft():
+            return Movement(self.current_position, self.current_position.moveUp())
+        elif self.desired_position == self.current_position.moveDown():
+            return Movement(self.current_position, self.current_position.moveLeft())
+        else:
+            return Movement(self.current_position, self.current_position.moveDown())

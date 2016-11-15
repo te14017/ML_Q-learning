@@ -65,15 +65,6 @@ class Environment(object):
         :param action: Movement
         :return position: Position, action: Action, profit_change: int, objective_found: boolean
         """
-        objective_found = False
-        if not self._isLegalMovement(action[1]):
-            return action[0], action, self.penalty + self.movement_cost, objective_found
-
-        objective_found, objective_value = self._foundObjective(action[1])
-        if objective_found:
-            return action[1].desired_position, action, objective_value+self.movement_cost, objective_found
-
-        # TODO choose direction randomly
         random.seed(2016)
         action_indicator = random.uniform(0, 1)  # random number 0 <= x <= 1
         if action_indicator <= 0.8:
@@ -81,8 +72,17 @@ class Environment(object):
             pass
         elif action <= 0.9:
             # change action to 90 left
-            pass
+            movement = action[1]
+            action[1] = movement.turnLeft()
         else:
             # change action to 90 right
-            pass
+            movement = action[1]
+            action[1] = movement.turnRight()
+        objective_found = False
+        if not self._isLegalMovement(action[1]):
+            return action[0], action, self.penalty + self.movement_cost, objective_found
+
+        objective_found, objective_value = self._foundObjective(action[1])
+        if objective_found:
+            return action[1].desired_position, action, objective_value+self.movement_cost, objective_found
         return action[1].desired_position, action, self.movement_cost, objective_found
