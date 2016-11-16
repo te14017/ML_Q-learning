@@ -70,14 +70,14 @@ class Environment(object):
         if action_indicator <= 0.8:
             # do nothing
             pass
-        elif action <= 0.9:
+        elif action_indicator <= 0.9:
             # change action to 90 left
             movement = action[1]
-            action[1] = movement.turnLeft()
+            action = (action[0], movement.turnLeft())
         else:
             # change action to 90 right
             movement = action[1]
-            action[1] = movement.turnRight()
+            action = (action[0], movement.turnRight())
         objective_found = False
         if not self._isLegalMovement(action[1]):
             return action[0], action, self.penalty + self.movement_cost, objective_found
