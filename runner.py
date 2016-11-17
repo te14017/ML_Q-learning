@@ -8,7 +8,7 @@ def main():
     environment = Environment()
     robot = Robot()
     i = 1
-    n = 80
+    n = 100
     while i <= n:
         objective_found = False
         while not objective_found:
