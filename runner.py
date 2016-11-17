@@ -8,7 +8,7 @@ def main():
     environment = Environment()
     robot = Robot()
     i = 1
-    n = 10
+    n = 100
     while i <= n:
         objective_found = False
         while not objective_found:
@@ -18,6 +18,9 @@ def main():
         print robot
         robot.reset()
         i += 1
+    # check the Q value learnt by robot
+    for qValue in sorted(robot.q.keys()):
+        print str(qValue) + ": " + str(robot.q[qValue])
 
 
 if __name__ == '__main__':

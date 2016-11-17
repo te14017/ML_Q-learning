@@ -16,6 +16,20 @@ class Position(object):
     def __ne__(self, other):
         return not (self == other)
 
+    def __cmp__(self, other):
+        if self.row < other.row:
+            return -1
+        elif self.row == other.row:
+            if self.column == other.column:
+                return 0
+            elif self.column < other.column:
+                return -1
+            else:
+                return 1
+        else:
+            return 1
+
+
     def moveUp(self):
         return Position(row=self.row - 1, column=self.column)
 
