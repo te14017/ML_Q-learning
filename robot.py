@@ -116,3 +116,23 @@ class Robot(object):
         """Resets the robot to start without erasing the q values"""
         self.state = Position(1, 1)
         self.profit = 0
+
+
+class RandomRobot(Robot):
+    """
+    Random Robot chooses actions randomly
+    """
+
+    def doAction(self):
+        """ Lets the robot perform his movement
+        :return Movement
+        """
+        # initialize all possible movements with q value 0
+        available_qs = [
+            (self.state, Movement(current_position=self.state, desired_position=self.state.moveDown())),
+            (self.state, Movement(current_position=self.state, desired_position=self.state.moveUp())),
+            (self.state, Movement(current_position=self.state, desired_position=self.state.moveLeft())),
+            (self.state, Movement(current_position=self.state, desired_position=self.state.moveRight()))
+        ]
+        choice = random.randint(0, len(available_qs) - 1)
+        return available_qs[choice]

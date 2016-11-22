@@ -1,14 +1,14 @@
 # copyright (C) Team Terminator
 # Authors: V. Barth, A. Eiselmayer, J. Luo, F. Panakkal, T. Tan
 
-from robot import Robot
+from robot import *
 from environment import Environment
 import random
 
 
-def main():
+def _trial(robot):
     environment = Environment()
-    robot = Robot()
+    robot = robot
     i = 1
     n = 100
     random.seed(2016)
@@ -23,6 +23,11 @@ def main():
         print "Trial %s: # steps: %d - %s. Objective is: %d" % (i, steps, robot, profit_change)
         robot.reset()
         i += 1
+
+
+def main():
+    _trial(Robot())
+    _trial(RandomRobot())
 
 
 if __name__ == '__main__':
