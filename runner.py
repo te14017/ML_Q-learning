@@ -1,11 +1,12 @@
-# Copyright Team Terminator
+# copyright (C) Team Terminator
+# Authors: V. Barth, A. Eiselmayer, J. Luo, F. Panakkal, T. Tan
+
 from robot import Robot
 from environment import Environment
-from helpers import *
 import random
 
 
-def main(simulation=False):
+def main():
     environment = Environment()
     robot = Robot()
     i = 1
@@ -19,15 +20,9 @@ def main(simulation=False):
             new_position, action, profit_change, objective_found = environment.performRobotAction(action=action)
             robot.update(next_position=new_position, action=action, profit_change=profit_change)
             steps += 1
-        if not simulation:
-            print "Trial %s: # steps: %d - %s. Objective is: %d" % (i, steps, robot, profit_change)
-        if i == 100 and simulation:
-            print robot
+        print "Trial %s: # steps: %d - %s. Objective is: %d" % (i, steps, robot, profit_change)
         robot.reset()
         i += 1
-    # check the Q value learnt by robot
-    #for qValue in sorted(robot.q.keys()):
-     #   print str(qValue) + ": " + str(robot.q[qValue])
 
 
 if __name__ == '__main__':

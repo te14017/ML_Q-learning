@@ -1,5 +1,12 @@
-# copyright Team Terminator
+# copyright (C) Team Terminator
+# Authors: V. Barth, A. Eiselmayer, J. Luo, F. Panakkal, T. Tan
+
+
 class Position(object):
+    """
+    Position in the maze
+    """
+
     def __init__(self, row, column):
         self.row = row
         self.column = column
@@ -29,29 +36,62 @@ class Position(object):
         else:
             return 1
 
-
     def moveUp(self):
+        """
+        Gets position which is above the robot (looking onto the maze not through the "eyes" of the robots)
+        :return: Position
+        """
         return Position(row=self.row - 1, column=self.column)
 
     def moveDown(self):
+        """
+        Gets position which is underneath the robot (looking onto the maze not through the "eyes" of the robots)
+        :return: Position
+        """
         return Position(row=self.row + 1, column=self.column)
 
     def moveRight(self):
+        """
+        Gets position which is to the right of the robot (looking onto the maze not through the "eyes" of the robots)
+        :return: Position
+        """
         return Position(row=self.row, column=self.column + 1)
 
     def moveLeft(self):
+        """
+        Gets position which is to the left of the robot (looking onto the maze not through the "eyes" of the robots)
+        :return: Position
+        """
         return Position(row=self.row, column=self.column - 1)
 
 
 class Reward(object):
-    def __init__(self, value, row, column, name):
+    """
+    Rewards which can be found in the maze
+    """
+
+    def __init__(self, value, position, name):
+        """
+        :param value: number value
+        :param position: Position
+        :param name: Label
+        """
         self.value = value
-        self.position = Position(row, column)
+        self.position = position
         self.name = name
 
 
 class Movement(object):
+    """
+    Movement from a position to another
+    """
+
     def __init__(self, current_position, desired_position):
+        """
+        Movement is directed from one position to the other
+        :param current_position: Position
+        :param desired_position: Position
+        """
         self.current_position = current_position
         self.desired_position = desired_position
 
@@ -68,9 +108,17 @@ class Movement(object):
         return not (self == other)
 
     def reverse(self):
+        """
+        Reverses the direction of a movement
+        :return: Movement in the opposite directoin
+        """
         return Movement(current_position=self.desired_position, desired_position=self.current_position)
 
     def turnLeft(self):
+        """
+        Change straight movement to the a left movement
+        :return: Movement to the left of the positions point of view
+        """
         if self.desired_position == self.current_position.moveUp():
             return Movement(self.current_position, self.current_position.moveLeft())
         elif self.desired_position == self.current_position.moveLeft():
@@ -81,6 +129,10 @@ class Movement(object):
             return Movement(self.current_position, self.current_position.moveUp())
 
     def turnRight(self):
+        """
+        Change straight movement to the a right movement
+        :return: Movement to the right of the positions point of view
+        """
         if self.desired_position == self.current_position.moveUp():
             return Movement(self.current_position, self.current_position.moveRight())
         elif self.desired_position == self.current_position.moveLeft():

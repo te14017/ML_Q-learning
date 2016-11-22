@@ -1,3 +1,6 @@
+# copyright (C) Team Terminator
+# Authors: V. Barth, A. Eiselmayer, J. Luo, F. Panakkal, T. Tan
+
 from helpers import *
 import random
 
@@ -7,16 +10,16 @@ class Environment(object):
 
     def __init__(self):
         self.rewards = [
-            Reward(value=100, row=2, column=4, name='+100'),
-            Reward(value=50, row=2, column=3, name='+50'),
-            Reward(value=-100, row=2, column=2, name='-100')
+            Reward(value=100, position=Position(2, 4), name='+100'),
+            Reward(value=50, position=Position(2, 3), name='+50'),
+            Reward(value=-100, position=Position(2, 2), name='-100')
         ]
-        self.square_size = 5
-        self.penalty = -10
+        self.square_size = 5  # Size of our maze
+        self.penalty = -10  # penalty for hitting a wall or trying to leave the maze
         self.movement_cost = -1
+        # forbidden movements need only to be declared once because the reverse movement will be checked
+        # boundaries first row from left to right
         self.forbidden_movements = [
-            # forbidden movements need only to be declared once because the reverse movement will be checked
-            # boundaries first row from left to right
             Movement(current_position=Position(1, 2), desired_position=Position(2, 2)),
             Movement(current_position=Position(1, 4), desired_position=Position(2, 4)),
             # boundaries second row from left to right
@@ -38,6 +41,11 @@ class Environment(object):
         ]
 
     def _isLegalMovement(self, movement):
+        """
+        Checks if movement is leaving the maze or hitting a wall
+        :param movement: Movement which the robot would like to perform
+        :return: True if the movement is ok otherwise returns False
+        """
         movement_legal = True
         if self._isForbiddenMovement(movement):
             movement_legal = False
@@ -46,13 +54,28 @@ class Environment(object):
         return movement_legal
 
     def _isForbiddenMovement(self, movement):
+        """
+        Checks movement hits a wall
+        :param movement: Movement which the robot would like to perform
+        :return: True if it hits a wall False otherwise
+        """
         return movement in self.forbidden_movements or movement.reverse() in self.forbidden_movements
 
     def _isMovementOutOfBounds(self, movement):
+        """
+        Check if movement would leave the maze
+        :param movement: Movement which the robot would like to perform
+        :return: True if robot would leave the maze, False otherwise
+        """
         return movement.desired_position.row <= 0 or movement.desired_position.row > self.square_size or \
-                        movement.desired_position.column <= 0 or movement.desired_position.column > self.square_size
+               movement.desired_position.column <= 0 or movement.desired_position.column > self.square_size
 
     def _foundObjective(self, movement):
+        """
+        Checks whether on the next position of the robot is a reward or not
+        :param movement: Movement which the robot would like to perform
+        :return: True and reward value if there is a reward, False and 0 otherwise
+        """
         rewards = self.rewards
         for reward in rewards:
             if movement.desired_position == reward.position:
@@ -62,9 +85,11 @@ class Environment(object):
 
     def performRobotAction(self, action):
         """
-        :param action: Movement
-        :return position: Position, action: Action, profit_change: int, objective_found: boolean
+        Performs the action of the robot in the environment if possible
+        :param action: (Position, Movement) the robot wants to do
+        :return: position: Position, action: Action, profit_change: int, objective_found: boolean
         """
+        # environments chooses if the robot will go to its desired position or change to left or right
         action_indicator = random.uniform(0, 1)  # random number 0 <= x <= 1
         if action_indicator <= 0.8:
             # do nothing
@@ -83,5 +108,5 @@ class Environment(object):
 
         objective_found, objective_value = self._foundObjective(action[1])
         if objective_found:
-            return action[1].desired_position, action, objective_value+self.movement_cost, objective_found
+            return action[1].desired_position, action, objective_value + self.movement_cost, objective_found
         return action[1].desired_position, action, self.movement_cost, objective_found
