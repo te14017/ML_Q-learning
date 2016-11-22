@@ -2,6 +2,7 @@
 from robot import Robot
 from environment import Environment
 from helpers import *
+import random
 
 
 def main(simulation=False):
@@ -9,6 +10,7 @@ def main(simulation=False):
     robot = Robot()
     i = 1
     n = 100
+    random.seed(2016)
     while i <= n:
         objective_found = False
         steps = 0

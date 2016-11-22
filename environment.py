@@ -65,7 +65,6 @@ class Environment(object):
         :param action: Movement
         :return position: Position, action: Action, profit_change: int, objective_found: boolean
         """
-        random.seed(2016)
         action_indicator = random.uniform(0, 1)  # random number 0 <= x <= 1
         if action_indicator <= 0.8:
             # do nothing
