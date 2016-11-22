@@ -34,11 +34,15 @@ class Robot(object):
                 available_qs[state_action_pair[1]] = self.q[state_action_pair]
 
         biggest_reward = 0
+        smallest_reward = 0
         for idx, reward in enumerate(available_qs.values()):
             if idx == 0:
                 biggest_reward = reward
+                smallest_reward = reward
             if reward > biggest_reward:
                 biggest_reward = reward
+            if reward < smallest_reward:
+                smallest_reward = reward
 
         random.seed(2016)
         go_on_exploration = random.uniform(0, 1) < self.epsilon
@@ -50,7 +54,14 @@ class Robot(object):
                     feasible_actions.append(state_action_pair)
         else:
             for state_action_pair, reward in available_qs.iteritems():
-                feasible_actions.append(state_action_pair)
+                if smallest_reward == 0 or biggest_reward == 0:
+                    if reward == 0:
+                        feasible_actions.append(state_action_pair)
+                else:
+                    if smallest_reward == 0:
+                        feasible_actions.append(state_action_pair)
+                    elif reward > smallest_reward:
+                        feasible_actions.append(state_action_pair)
 
         if len(feasible_actions) == 1:
             return feasible_actions[0]
