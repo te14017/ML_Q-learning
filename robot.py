@@ -15,6 +15,7 @@ class Robot(object):
         self.alpha = 0.99  # learning rate
         self.gamma = 0.95  # discount factor
         self.epsilon = 0.99  # exploration rate
+        self.explorations = 0
 
     def __repr__(self):
         return "%s is @ %s. Profit is: %d" % (self.__class__.__name__, self.state, self.profit)
@@ -45,13 +46,17 @@ class Robot(object):
                 smallest_reward = reward
 
         go_on_exploration = random.uniform(0, 1) < self.epsilon
-        self.epsilon = self.epsilon - (1 - self.epsilon) if self.epsilon > 0 else 0
+        if self.explorations > 2700:
+                if self.epsilon > 0:
+                    self.epsilon -= 0.1
+
         feasible_actions = []
         if not go_on_exploration:
             for state_action_pair, reward in available_qs.iteritems():
                 if reward == biggest_reward:
                     feasible_actions.append(state_action_pair)
         else:
+            self.explorations += 1
             for state_action_pair, reward in available_qs.iteritems():
                 if smallest_reward == 0 or biggest_reward == 0:
                     if reward == 0:
