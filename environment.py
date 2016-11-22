@@ -12,7 +12,7 @@ class Environment(object):
             Reward(value=-100, row=2, column=2, name='-100')
         ]
         self.square_size = 5
-        self.penalty = -5
+        self.penalty = -10
         self.movement_cost = -1
         self.forbidden_movements = [
             # forbidden movements need only to be declared once because the reverse movement will be checked
