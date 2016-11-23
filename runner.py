@@ -20,14 +20,19 @@ def _trial(robot):
             new_position, action, profit_change, objective_found = environment.performRobotAction(action=action)
             robot.update(next_position=new_position, action=action, profit_change=profit_change)
             steps += 1
+        # pretty output that helps
         print "Trial %s: # steps: %d - %s. Objective is: %d" % (i, steps, robot, profit_change)
+        # output that can be analyzed in eg excel
+        # print "%s,%d,%s,%d" % (i, steps, robot.profit, profit_change)
         robot.reset()
         i += 1
 
 
 def main():
+    # start up the normal robot
     _trial(Robot())
-    _trial(RandomRobot())
+    # start up the random robot
+    # _trial(RandomRobot())
 
 
 if __name__ == '__main__':
