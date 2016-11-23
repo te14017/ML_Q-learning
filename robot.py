@@ -16,6 +16,8 @@ class Robot(object):
         self.gamma = 0.95  # discount factor
         self.epsilon = 0.99  # exploration rate
         self.explorations = 0  # counts number of explorations
+        self.exploration_threshold = 2400
+        self.initial_q = 0
 
     def __repr__(self):
         return "%s is @ %s. Profit is: %d" % (self.__class__.__name__, self.state, self.profit)
@@ -26,18 +28,18 @@ class Robot(object):
         """
         # initialize all possible movements with q value 0
         available_qs = {
-            (self.state, Movement(current_position=self.state, desired_position=self.state.moveDown())): 0,
-            (self.state, Movement(current_position=self.state, desired_position=self.state.moveUp())): 0,
-            (self.state, Movement(current_position=self.state, desired_position=self.state.moveLeft())): 0,
-            (self.state, Movement(current_position=self.state, desired_position=self.state.moveRight())): 0,
+            (self.state, Movement(current_position=self.state, desired_position=self.state.moveDown())): self.initial_q,
+            (self.state, Movement(current_position=self.state, desired_position=self.state.moveUp())): self.initial_q,
+            (self.state, Movement(current_position=self.state, desired_position=self.state.moveLeft())): self.initial_q,
+            (self.state, Movement(current_position=self.state, desired_position=self.state.moveRight())): self.initial_q,
         }
         # search if there are q values for state action pair
         for state_action_pair in self.q:
             if self.state == state_action_pair[0]:
                 available_qs[state_action_pair[1]] = self.q[state_action_pair]
 
-        biggest_reward = 0  # value for best possible options
-        smallest_reward = 0  # value for worst possible option
+        biggest_reward = self.initial_q  # value for best possible options
+        smallest_reward = self.initial_q  # value for worst possible option
         for idx, reward in enumerate(available_qs.values()):
             if idx == 0:
                 biggest_reward = reward
@@ -49,7 +51,7 @@ class Robot(object):
 
         go_on_exploration = random.uniform(0, 1) < self.epsilon  # determines whether the robot should explore or not
         # the exploration rate will only be decrease when the robot was already exploring for some time
-        if self.explorations > 1400:
+        if self.explorations > self.exploration_threshold:
             if self.epsilon > 0:
                 self.epsilon -= 0.1
 
@@ -64,11 +66,11 @@ class Robot(object):
             # robot is going on exploration
             self.explorations += 1
             for state_action_pair, reward in available_qs.iteritems():
-                if smallest_reward == 0 or biggest_reward == 0:  # for the beginning, if there are no real values yet
-                    if reward == 0:
+                if smallest_reward == self.initial_q or biggest_reward == self.initial_q:  # for the beginning, if there are no real values yet
+                    if reward == self.initial_q:
                         feasible_actions.append(state_action_pair)
                 else:
-                    if smallest_reward == 0:  # for the beginning, if there are no real values for q yet
+                    if smallest_reward == self.initial_q:  # for the beginning, if there are no real values for q yet
                         feasible_actions.append(state_action_pair)
                     elif reward > smallest_reward:
                         # this ensures that we never explore to the worst direction
