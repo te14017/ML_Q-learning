@@ -16,7 +16,7 @@ class Robot(object):
         self.gamma = 0.95  # discount factor
         self.epsilon = 0.99  # exploration rate
         self.explorations = 0  # counts number of explorations
-        self.exploration_threshold = 2400
+        self.exploration_threshold = 1400
         self.initial_q = 0
 
     def __repr__(self):
