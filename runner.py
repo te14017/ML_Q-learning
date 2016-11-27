@@ -15,6 +15,7 @@ def _trial(robot):
     while i <= n:
         objective_found = False
         steps = 0
+        #while not (objective_found or steps >= 25):
         while not objective_found:
             action = robot.doAction()
             new_position, action, profit_change, objective_found = environment.performRobotAction(action=action)
